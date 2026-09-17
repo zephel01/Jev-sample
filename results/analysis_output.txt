@@ -1,0 +1,149 @@
+
+## レイテンシ（往復込み、直列）
+site  kind    n    p50     p95     p99     mean   in_tok
+mac   choice   50   544.5   615.3   788.5   554.6    589
+mac   noul1    50   551.2   710.9   832.2   574.0    445
+mac   noul4    50   549.2   611.5  1541.2   573.0    803
+mac   score    50   546.4   623.3   644.2   553.0    403
+cloud choice   50   413.3   540.2   721.6   431.3    589
+cloud noul1    50   435.6   588.2   706.4   445.6    445
+cloud noul4    50   423.8   642.0   755.6   449.8    803
+cloud score    50   431.9   576.9   903.7   455.3    403
+
+## 正解率（site=mac, n=960）
+lang noise method       n    正解率   p50ms   in_tok/件
+ja   clean direct       120    48.3%   538.4       640
+ja   clean decomposed   120    98.3%   531.3       854
+ja   noisy direct       120    55.0%   535.0       691
+ja   noisy decomposed   120    86.7%   537.1       905
+en   clean direct       120    56.7%   539.7       480
+en   clean decomposed   120    99.2%   539.0       572
+en   noisy direct       120    65.0%   535.5       511
+en   noisy decomposed   120    96.7%   539.5       603
+
+### 混同（site=mac, ja/clean）
+ [direct] 正解ラベル -> 予測（誤りのみ）
+   external_harness  -> haiku_inline      19
+   opus_subagent     -> haiku_inline      17
+   ask_user          -> opus_subagent     7
+   opus_subagent     -> external_harness  7
+   ask_user          -> external_harness  7
+   ask_user          -> haiku_inline      5
+ [decomposed] 正解ラベル -> 予測（誤りのみ）
+   external_harness  -> haiku_inline      2
+
+### 校正（site=mac, direct, confidence 帯ごとの実正解率）
+ 帯        n    実正解率
+ 0.0-0.1     1     0.0%
+ 0.1-0.2    14    50.0%
+ 0.2-0.3    35    31.4%
+ 0.3-0.4    61    36.1%
+ 0.4-0.5    57    22.8%
+ 0.5-0.6    54    44.4%
+ 0.6-0.7    41    48.8%
+ 0.7-0.8    36    50.0%
+ 0.8-0.9    43    55.8%
+ 0.9-1.0   138    94.9%
+
+### 保留にした場合（site=mac, direct, ja/clean）
+ 閾値 0.00: 自動処理 100.0%  その中の正解率  48.3%  保留   0.0%
+ 閾値 0.50: 自動処理  65.0%  その中の正解率  60.3%  保留  35.0%
+ 閾値 0.70: 自動処理  49.2%  その中の正解率  72.9%  保留  50.8%
+ 閾値 0.80: 自動処理  40.0%  その中の正解率  79.2%  保留  60.0%
+ 閾値 0.90: 自動処理  32.5%  その中の正解率  84.6%  保留  67.5%
+ 閾値 0.95: 自動処理  25.8%  その中の正解率  96.8%  保留  74.2%
+
+### コスト（site=mac）
+ リクエスト数 1160、入力トークン 743,038、概算 $0.0312（出力は無料）
+
+## 正解率（site=cloud, n=960）
+lang noise method       n    正解率   p50ms   in_tok/件
+ja   clean direct       120    48.3%   445.6       640
+ja   clean decomposed   120    97.5%   444.4       854
+ja   noisy direct       120    54.2%   454.5       691
+ja   noisy decomposed   120    85.8%   445.1       905
+en   clean direct       120    56.7%   437.6       480
+en   clean decomposed   120    99.2%   443.9       572
+en   noisy direct       120    66.7%   441.5       511
+en   noisy decomposed   120    95.8%   438.0       603
+
+### 混同（site=cloud, ja/clean）
+ [direct] 正解ラベル -> 予測（誤りのみ）
+   external_harness  -> haiku_inline      18
+   opus_subagent     -> haiku_inline      17
+   ask_user          -> external_harness  9
+   opus_subagent     -> external_harness  7
+   ask_user          -> opus_subagent     6
+   ask_user          -> haiku_inline      5
+ [decomposed] 正解ラベル -> 予測（誤りのみ）
+   external_harness  -> haiku_inline      2
+   external_harness  -> ask_user          1
+
+### 校正（site=cloud, direct, confidence 帯ごとの実正解率）
+ 帯        n    実正解率
+ 0.1-0.2    13    46.2%
+ 0.2-0.3    36    33.3%
+ 0.3-0.4    54    37.0%
+ 0.4-0.5    75    33.3%
+ 0.5-0.6    46    41.3%
+ 0.6-0.7    31    41.9%
+ 0.7-0.8    49    44.9%
+ 0.8-0.9    38    65.8%
+ 0.9-1.0   138    93.5%
+
+### 保留にした場合（site=cloud, direct, ja/clean）
+ 閾値 0.00: 自動処理 100.0%  その中の正解率  48.3%  保留   0.0%
+ 閾値 0.50: 自動処理  66.7%  その中の正解率  57.5%  保留  33.3%
+ 閾値 0.70: 自動処理  49.2%  その中の正解率  72.9%  保留  50.8%
+ 閾値 0.80: 自動処理  38.3%  その中の正解率  82.6%  保留  61.7%
+ 閾値 0.90: 自動処理  33.3%  その中の正解率  82.5%  保留  66.7%
+ 閾値 0.95: 自動処理  26.7%  その中の正解率  93.8%  保留  73.3%
+
+### コスト（site=cloud）
+ リクエスト数 1160、入力トークン 743,038、概算 $0.0312（出力は無料）
+
+## 合成ルールの閾値を振る（decomposed, ja/clean）
+ site=mac
+  thr=0.3:  92.5%  (n=120)
+  thr=0.4:  97.5%  (n=120)
+  thr=0.5:  98.3%  (n=120)
+  thr=0.6:  91.7%  (n=120)
+  thr=0.7:  79.2%  (n=120)
+ site=cloud
+  thr=0.3:  93.3%  (n=120)
+  thr=0.4:  97.5%  (n=120)
+  thr=0.5:  97.5%  (n=120)
+  thr=0.6:  90.0%  (n=120)
+  thr=0.7:  80.0%  (n=120)
+
+## ラベル別の再現率（site=mac）
+[ja/clean]
+  haiku_inline       direct:30/30  decomposed:30/30
+  opus_subagent      direct: 6/30  decomposed:30/30
+  external_harness   direct:11/30  decomposed:28/30
+  ask_user           direct:11/30  decomposed:30/30
+[en/clean]
+  haiku_inline       direct:30/30  decomposed:30/30
+  opus_subagent      direct:14/30  decomposed:30/30
+  external_harness   direct:10/30  decomposed:29/30
+  ask_user           direct:14/30  decomposed:30/30
+[ja/noisy]
+  haiku_inline       direct:30/30  decomposed:29/30
+  opus_subagent      direct:12/30  decomposed:25/30
+  external_harness   direct:12/30  decomposed:20/30
+  ask_user           direct:12/30  decomposed:30/30
+[en/noisy]
+  haiku_inline       direct:30/30  decomposed:30/30
+  opus_subagent      direct:16/30  decomposed:29/30
+  external_harness   direct:11/30  decomposed:27/30
+  ask_user           direct:21/30  decomposed:30/30
+
+## 個別 noul の正解率（ja/clean, thr=0.5）
+  info          120/120 = 100.0%
+  irreversible  120/120 = 100.0%
+  design        120/120 = 100.0%
+  broad         112/120 =  93.3%
+
+## direct の予測分布（ja、正解は各30件ずつ）
+  clean: {'haiku_inline': 71, 'opus_subagent': 13, 'ask_user': 11, 'external_harness': 25}
+  noisy: {'haiku_inline': 62, 'external_harness': 24, 'opus_subagent': 19, 'ask_user': 15}

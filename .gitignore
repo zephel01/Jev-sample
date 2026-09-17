@@ -1,0 +1,10 @@
+__pycache__/
+*.py[oc]
+.venv/
+*.png
+
+# 認証情報は絶対に入れない
+key
+*.key
+.env
+.typesafe/
